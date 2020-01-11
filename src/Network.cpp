@@ -38,7 +38,7 @@ class Network {
   }
   void initWeights() {
     for (int layer = 0; layer < numLayers-1; ++layer) {
-      std::vector<std::vector<double>> v(layers[layer+1], std::vector<double>(layers[layer]));
+      std::vector<std::vector<double>> v(layers[layer], std::vector<double>(layers[layer+1]));
       for (std::vector<double>& vec : v) {
         genRand(vec);
       }
@@ -61,8 +61,8 @@ class Network {
     return 1 / (1 + exp(-x));
   }
 
-  // public methods
  public:
+
   explicit Network(const std::vector<int>& layers) {
     numLayers = layers.size();
     (*this).layers = layers;
@@ -78,7 +78,8 @@ class Network {
   }
 
   void calcOutputs() {
-    for (int layer = 1; layer <= numLayers; ++layer) {
+    for (int layer = 1; layer < numLayers; ++layer) {
+      std::cout<<"ASdf";
       for (int neuron = 0; neuron < layers[layer]; ++neuron) {
         double weightedSum = biases[layer][neuron];
         for (int prevNeuron = 0; prevNeuron < layers[layer-1]; ++prevNeuron) {
@@ -89,12 +90,12 @@ class Network {
     }
   }
 
-  void backward(const std::vector<double>& target, double learningRate) {
+  void backward(const std::vector<int>& target, double learningRate) {
     calcErrors(target);
     updateNetwork(learningRate);
   }
 
-  void calcErrors(const std::vector<double>& target) {
+  void calcErrors(const std::vector<int>& target) {
     for (int neuron = 0; neuron < layers[numLayers-1]; ++neuron) {
       errors[numLayers-1][neuron] = (outputs[numLayers-1][neuron] - target[neuron]) * outputs[numLayers-1][neuron] * (1 - outputs[numLayers-1][neuron]);
     }
@@ -120,7 +121,7 @@ class Network {
     }
   }
 
-  void train(const std::vector<double>& input, const std::vector<double>& target, double learningRate) {
+  void train(const std::vector<double>& input, const std::vector<int>& target, double learningRate) {
     forward(input);
     backward(target, learningRate);
   }
@@ -136,11 +137,3 @@ class Network {
   }
 
 };
-
-//int main() {
-//  std::vector<int> l({5,4,3});
-//  Network n(l);
-//  std::cout<<n;
-////  std::vector<double> in({.3,.4,.5,.7,.3});
-////  n.forward(in);
-//}
