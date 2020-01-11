@@ -3,8 +3,6 @@
 #include <cmath>
 #include <fstream>
 
-
-
 struct Trainset { //class or struct?
 
   // inner struct
