@@ -1,4 +1,57 @@
-#include "mnist_set.h"
+#include <iostream>
+#include <vector>
+#include <cmath>
+#include <fstream>
+
+class Trainset {
+  //constants
+  static constexpr int kImageSize = 28;
+  static constexpr int kNumClasses = 10;
+  static constexpr int kImagesMagicNum = 16;
+  static constexpr int kLabelsMagicNum = 8;
+  // class variables
+  std::vector<std::vector<double>> images;
+  std::vector<std::vector<int>> labels;
+
+ public:
+  Trainset(std::ifstream& imageStream, std::ifstream& labelStream, int startIndex, int length) : images(length, std::vector<double>(pow(kImageSize, 2))), labels(length) {
+
+    if (startIndex < 0) {
+      throw std::invalid_argument("Bad startIndex for Trainset constructor!");
+    }
+    if (length < 1 || length > 60000) {
+      throw std::invalid_argument("Bad index for Trainset constructor! Try 1 <= length <= 60000.");
+    }
+
+    imageStream.seekg(kImagesMagicNum + (startIndex * pow(kImageSize, 2)));
+    labelStream.seekg(kLabelsMagicNum + startIndex);
+
+    for (int i = 0; i < length; ++i) {
+
+      std::vector<double> v(pow(kImageSize, 2));
+      for (double& d : v) {
+        d = static_cast<double>(imageStream.get()) / 255;
+      }
+
+      std::vector<int> v2(kNumClasses, 0);
+      v2[labelStream.get()] = 1;
+
+      images.push_back(v);
+      labels.push_back(v2);
+    }
+  }
+};
+
+int main() {
+  std::ifstream imagedata("/Users/alexander/CLionProjects/mnistnetwork/resources/train-images.idx3-ubyte");
+  std::ifstream labeldata("/Users/alexander/CLionProjects/mnistnetwork/resources/train-labels.idx1-ubyte");
+  Trainset t(imagedata, labeldata, 0, 10);
+  std::cin.get();
+}
+
+
+/*
+ * #include "mnist_set.h"
 #include <fstream>
 #include <cmath>
 
@@ -53,3 +106,4 @@ std::ostream &operator<<(std::ostream &out, const mnist_set &ms) {
 }
 
 //4 32-bit integers: magic number, num samples, rows, cols
+ */
