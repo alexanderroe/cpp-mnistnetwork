@@ -1,5 +1,6 @@
 #include "./src/Network.cpp"
 #include "./src/Trainset.cpp"
+#include <cmath>
 
 static void train(Network& n, const Trainset& set) {
   for (Trainset::Sample s : set.samples) {
@@ -12,8 +13,9 @@ int main() {
   Network n(l);
   Trainset t("/Users/alexander/CLionProjects/mnistnetwork/resources/train-images.idx3-ubyte",
            "/Users/alexander/CLionProjects/mnistnetwork/resources/train-labels.idx1-ubyte",
-           0, 100);
+           0, 1);
+  std::cout<<"";
   train(n, t);
-  n.forward(t.samples[0].image);
-  std::cin.get();
+  std::cout<<"";
+  n.save("networknotrain.txt");
 }

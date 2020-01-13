@@ -2,8 +2,9 @@
 #include <vector>
 #include <cmath>
 #include <random>
+#include <fstream>
 
-class Network {
+struct Network {
 
   // class variables
   int numLayers;
@@ -63,13 +64,17 @@ class Network {
 
  public:
 
-  explicit Network(const std::vector<int>& layers) {
-    numLayers = layers.size();
-    (*this).layers = layers;
+  explicit Network(const std::vector<int>& l) {
+    numLayers = l.size();
+    layers = l;
     initBiases();
     initErrors();
     initOutputs();
     initWeights();
+  }
+
+  Network(const std::string& fileName) {
+
   }
 
   void forward(const std::vector<double>& input) {
@@ -79,7 +84,6 @@ class Network {
 
   void calcOutputs() {
     for (int layer = 1; layer < numLayers; ++layer) {
-      std::cout<<"ASdf";
       for (int neuron = 0; neuron < layers[layer]; ++neuron) {
         double weightedSum = biases[layer][neuron];
         for (int prevNeuron = 0; prevNeuron < layers[layer-1]; ++prevNeuron) {
@@ -92,7 +96,9 @@ class Network {
 
   void backward(const std::vector<int>& target, double learningRate) {
     calcErrors(target);
+    std::cout<<"";
     updateNetwork(learningRate);
+    std::cout<<"";
   }
 
   void calcErrors(const std::vector<int>& target) {
@@ -123,7 +129,32 @@ class Network {
 
   void train(const std::vector<double>& input, const std::vector<int>& target, double learningRate) {
     forward(input);
+    std::cout<<"";
     backward(target, learningRate);
+    std::cout<<"";
+  }
+
+  void save(const std::string& fileName) {
+    std::ofstream file;
+    file.open(fileName);
+    file << "b";
+    for (std::vector<double>& vec : biases) {
+      for (double& d : vec) {
+        file << d << " ";
+      }
+      file << "\n";
+    }
+    file << "\nw";
+    for (std::vector<std::vector<double>>& mat : weights) {
+      for (std::vector<double>& vec : mat) {
+        for (double& d : vec) {
+          file << d << " ";
+        }
+        file << "\n";
+      }
+      file << "\n";
+    }
+    file.close();
   }
 
   friend std::ostream& operator<<(std::ostream& out, const Network& net) {

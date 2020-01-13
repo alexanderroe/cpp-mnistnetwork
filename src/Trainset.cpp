@@ -3,6 +3,11 @@
 #include <cmath>
 #include <fstream>
 
+#define kImageSize 28
+#define kNumClasses 10
+#define kImagesMagicNum 16
+#define kLabelsMagicNum 8
+
 struct Trainset { //class or struct?
 
   // inner struct
@@ -14,11 +19,6 @@ struct Trainset { //class or struct?
     Sample(const std::vector<double>& image, const std::vector<int>& label) : image(image), label(label) {}
   };
 
-  // constants
-  static constexpr int kImageSize = 28;
-  static constexpr int kNumClasses = 10;
-  static constexpr int kImagesMagicNum = 16;
-  static constexpr int kLabelsMagicNum = 8;
   // class variables
   std::vector<Sample> samples;
 
