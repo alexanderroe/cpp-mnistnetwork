@@ -74,10 +74,10 @@ struct Network {
   }
 
   Network(const std::string& fileName) {
-
+    //load network from file constructor
   }
 
-  void forward(const std::vector<double>& input) {
+  void forward(std::vector<double>& input) {
     outputs[0] = input;
     calcOutputs();
   }
@@ -105,15 +105,17 @@ struct Network {
     for (int neuron = 0; neuron < layers[numLayers-1]; ++neuron) {
       errors[numLayers-1][neuron] = (outputs[numLayers-1][neuron] - target[neuron]) * outputs[numLayers-1][neuron] * (1 - outputs[numLayers-1][neuron]);
     }
+
     for (int layer = numLayers-2; layer > 0; --layer) {
       for (int neuron = 0; neuron < layers[layer]; ++neuron) {
         double sum = 0;
         for (int nextNeuron = 0; nextNeuron < layers[layer+1]; ++nextNeuron) {
           sum += weights[layer][neuron][nextNeuron] * errors[layer+1][nextNeuron];
         }
-        errors[layer][neuron] = sum * outputs[numLayers-1][neuron] * (1 - outputs[numLayers-1][neuron]);
+        errors[layer][neuron] = sum * outputs[layer][neuron] * (1 - outputs[layer][neuron]);
       }
     }
+
   }
 
   void updateNetwork(double learningRate) {
@@ -127,7 +129,7 @@ struct Network {
     }
   }
 
-  void train(const std::vector<double>& input, const std::vector<int>& target, double learningRate) {
+  void train(std::vector<double>& input, const std::vector<int>& target, double learningRate) {
     forward(input);
     std::cout<<"";
     backward(target, learningRate);
