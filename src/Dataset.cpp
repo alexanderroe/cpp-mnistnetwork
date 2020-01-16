@@ -8,7 +8,7 @@
 #define kImagesMagicNum 16
 #define kLabelsMagicNum 8
 
-struct Trainset { //class or struct?
+struct Dataset { //class or struct?
 
   // inner struct
   struct Sample {  //should be inner or separate struct?
@@ -23,13 +23,13 @@ struct Trainset { //class or struct?
   std::vector<Sample> samples;
 
   // constructor
-  Trainset(std::string imagePath, std::string labelPath, int startIndex, int length) {
+  Dataset(std::string imagePath, std::string labelPath, int startIndex, int length) {
 
     if (startIndex < 0) {
-      throw std::invalid_argument("Bad startIndex for Trainset constructor!");
+      throw std::invalid_argument("Bad startIndex for Dataset constructor!");
     }
     if (length < 1 || length > 60000) {
-      throw std::invalid_argument("Bad index for Trainset constructor! Try 1 <= length <= 60000.");
+      throw std::invalid_argument("Bad index for Dataset constructor! Try 1 <= length <= 60000.");
     }
 
     std::ifstream imageStream(imagePath);
