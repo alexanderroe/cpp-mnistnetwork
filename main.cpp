@@ -1,5 +1,5 @@
 #include <sstream>
-#include "./src/Network.cpp"
+#include "src/Network.h"
 #include "src/Dataset.cpp"
 
 static void train(Network& n, const Dataset& t, double learningRate) {
@@ -36,20 +36,24 @@ int main() {
   std::string labelpath = "/Users/alexander/CLionProjects/mnistnetwork/resources/train-labels.idx1-ubyte";
 
   // construct trainset
-  Dataset trainset(imagepath, labelpath, 0, 60000);
+  Dataset trainset(imagepath, labelpath, 6);
 
   // train network with trainset and learning rate
   train(net, trainset, 0.5);
 
-  // testing data file paths
-  std::string imagetest = "/Users/alexander/CLionProjects/mnistnetwork/resources/t10k-images.idx3-ubyte";
-  std::string labeltest = "/Users/alexander/CLionProjects/mnistnetwork/resources/t10k-labels.idx1-ubyte";
+  // save network
+  net.save("test.txt");
 
-  // construct testset
-  Dataset testset(imagetest, labeltest, 0, 5000);
-
-  //test network with testset
-  test(net, testset);
+//  // testing data file paths
+//  std::string imagetest = "/Users/alexander/CLionProjects/mnistnetwork/resources/t10k-images.idx3-ubyte";
+//  std::string labeltest = "/Users/alexander/CLionProjects/mnistnetwork/resources/t10k-labels.idx1-ubyte";
+//
+//  // construct testset
+//  Dataset testset(imagetest, labeltest, 0, 5000);
+//
+//  //test network with testset
+//  test(net, testset);
 }
+
 //.5, 60000, 5000 = .9136
 //hyperparam.: lr, trainset length, testset length, (data source), layers
